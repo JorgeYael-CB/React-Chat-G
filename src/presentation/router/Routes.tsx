@@ -1,10 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
 import { ForgotPassword, Login, Register, ResetPassword } from '../pages/auth';
+import { Chat } from "../pages/chat";
 
 
 
 
 export const Routes = createBrowserRouter([
+  {
+    path: '/',
+    element: <Chat/>
+  },
   {
     path: 'auth/',
     // TODO: Proteccion de rutas
