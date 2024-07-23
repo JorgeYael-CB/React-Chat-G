@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { store } from "../../store"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { ValidateData } from "../../../config";
@@ -14,6 +14,7 @@ export const Login = () => {
   const [loginError, setLoginError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const { login } = store();
+  const nav = useNavigate();
 
 
   const disabled = () => {
@@ -41,7 +42,7 @@ export const Login = () => {
     };
 
     login({...data.user!}, data.token!);
-    console.log('El usuario ya se loggeo');
+    nav('/');
   }
 
 

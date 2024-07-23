@@ -1,6 +1,7 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import { ForgotPassword, Login, Register, ResetPassword } from '../pages/auth';
 import { Chat } from "../pages/chat";
+import { PrivateAcces } from "../pages/auth/PrivateAcces";
 
 
 
@@ -8,11 +9,11 @@ import { Chat } from "../pages/chat";
 export const Routes = createBrowserRouter([
   {
     path: '/',
-    element: <Chat/>
+    element: <Chat/>,
   },
   {
     path: 'auth/',
-    // TODO: Proteccion de rutas
+    element: <PrivateAcces/>,
     children: [
       {
         path: 'login/',
@@ -30,6 +31,14 @@ export const Routes = createBrowserRouter([
         path: 'forgot-password/',
         element: <ForgotPassword/>,
       },
+      {
+        path: '/auth/*',
+        element: <Navigate to='/auth/login'/>
+      }
     ]
+  },
+  {
+    path: '/*',
+    element: <Navigate to='/'/>
   }
-])
+]);
