@@ -1,14 +1,51 @@
 import { NavLink } from "react-router-dom"
 import { store } from "../../store"
-import { FormEvent } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { ValidateData } from "../../../config";
+import { AlertForm } from "../../components/alerts";
 
 
 export const Login = () => {
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState<string>();
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState<string>();
+  const [loginError, setLoginError] = useState<string>();
   const { login } = store();
 
 
   const onSubmit = ( e:FormEvent<HTMLFormElement> ) => {
     e.preventDefault();
+  }
+
+  const disabled = () => {
+    return true;
+  }
+
+  const onChangeEmail = ( e:ChangeEvent<HTMLInputElement> ) => {
+    const { target: { value } } = e;
+    const [ emailErr ] = ValidateData.email(value);
+
+    if( emailErr ){
+      setEmailError( emailErr );
+    } else {
+      setEmailError(undefined);
+    };
+
+    setEmail(value);
+  }
+
+  const onChangePassword = (e:ChangeEvent<HTMLInputElement> ) => {
+    const { target: { value } } = e;
+    const [ passError ] = ValidateData.password(value);
+
+    if( passError ){
+      setPasswordError( passError );
+    } else {
+      setPasswordError( undefined );
+    };
+
+    setPassword(value);
   }
 
 
@@ -30,22 +67,38 @@ export const Login = () => {
             className="text-lg font-medium"
             htmlFor="email">Email:</label>
           <input
+            onChange={ onChangeEmail }
+            value={ email }
             id="email"
             className="py-1 px-2 font-medium text-sm focus:outline-none border-2 border-indigo-300 focus:border-indigo-600 transition-colors rounded-md"
             type="email"
             placeholder="example@correo.com"
           />
+
+          {
+            emailError
+            &&
+            <AlertForm message={emailError} error/>
+          }
         </div>
         <div className="flex flex-col gap-2 mt-5">
           <label
             className="text-lg font-medium"
             htmlFor="password">Password:</label>
           <input
+            onChange={ onChangePassword }
+            value={ password }
             id="password"
             className="py-1 px-2 font-medium text-sm focus:outline-none border-2 border-indigo-300 focus:border-indigo-600 transition-colors rounded-md"
             type="password"
             placeholder="example123"
           />
+
+          {
+            passwordError
+            &&
+            <AlertForm message={passwordError} error/>
+          }
         </div>
 
         <div className="flex flex-row md:justify-around justify-between px-2 my-6">
@@ -54,7 +107,9 @@ export const Login = () => {
         </div>
 
         <div className="flex flex-row justify-center px-8 mt-2">
-          <button className="bg-blue-600 font-bold text-center rounded-md p-2 w-full text-white hover:bg-blue-500 transition-colors">
+          <button
+            disabled={ disabled() }
+            className="bg-blue-600 font-bold text-center rounded-md p-2 w-full text-white hover:bg-blue-500 transition-colors disabled:opacity-50">
             Sign in.
           </button>
         </div>
