@@ -1,7 +1,17 @@
 import { NavLink } from "react-router-dom"
+import { store } from "../../store"
+import { FormEvent } from "react";
 
 
 export const Login = () => {
+  const { login } = store();
+
+
+  const onSubmit = ( e:FormEvent<HTMLFormElement> ) => {
+    e.preventDefault();
+  }
+
+
   return (
     <main>
       <div className="my-24 text-center">
@@ -9,6 +19,7 @@ export const Login = () => {
       </div>
 
       <form
+        onSubmit={ onSubmit }
         className="max-w-xl mx-auto py-4 px-6 bg-white shadow-md"
       >
         <h2 className="text-center text-3xl font-bold text-gray-500">Sign In</h2>

@@ -11,7 +11,7 @@ interface Props {
 
 
 
-export const chatStore = create<Props>( set => ({
+export const store = create<Props>( set => ({
   isLogged: false,
 
   login: ( user ) => {
