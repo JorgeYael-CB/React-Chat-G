@@ -3,6 +3,9 @@ import { LoginUserInterface } from "../../presentation/interfaces/auth";
 
 
 interface Props {
+  name?:string;
+  email?:string;
+  password:string;
 }
 
 
@@ -21,7 +24,7 @@ export const loginUser = async ( data: Props ):Promise<LoginUserInterface> => {
   } catch (error) {
     return {
       status: 500,
-      error: 'Internal Server error.',
+      error: 'Oops!, unexpected error, please try again later.',
     }
   }
 };

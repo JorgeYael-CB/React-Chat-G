@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom"
 import { store } from "../../store"
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { ValidateData } from "../../../config";
 import { AlertForm } from "../../components/alerts";
+import { loginUser } from "../../../core/auth";
 
 
 export const Login = () => {
@@ -11,19 +12,36 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string>();
   const [loginError, setLoginError] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = store();
 
 
   const disabled = () => {
-    return (!emailError && !passwordError) && (email !== '' && password !== '');
+    return (!emailError && !passwordError) && (email !== '' && password !== '') && (!isLoading);
   }
 
 
-  const onSubmit = ( e:FormEvent<HTMLFormElement> ) => {
+  useEffect(() => {
+    setPassword('');
+  }, [loginError])
+
+
+  const onSubmit = async( e:FormEvent<HTMLFormElement> ) => {
     e.preventDefault();
     if( !disabled() ) return;
+    setIsLoading(true);
+    setLoginError(undefined);
 
     // TODO: login del usuario - http
+    const data = await loginUser({password, email});
+    setIsLoading(false);
+
+    if( data.error ){
+      return setLoginError(data.error);
+    };
+
+    login({...data.user!});
+    console.log('El usuario ya se loggeo');
   }
 
 
@@ -118,6 +136,12 @@ export const Login = () => {
             Sign in.
           </button>
         </div>
+
+        {
+          loginError
+          &&
+          <AlertForm message={loginError} error/>
+        }
       </form>
     </main>
   )
