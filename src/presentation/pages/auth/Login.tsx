@@ -14,13 +14,18 @@ export const Login = () => {
   const { login } = store();
 
 
-  const onSubmit = ( e:FormEvent<HTMLFormElement> ) => {
-    e.preventDefault();
+  const disabled = () => {
+    return (!emailError && !passwordError) && (email !== '' && password !== '');
   }
 
-  const disabled = () => {
-    return true;
+
+  const onSubmit = ( e:FormEvent<HTMLFormElement> ) => {
+    e.preventDefault();
+    if( !disabled() ) return;
+
+    // TODO: login del usuario - http
   }
+
 
   const onChangeEmail = ( e:ChangeEvent<HTMLInputElement> ) => {
     const { target: { value } } = e;
@@ -108,7 +113,7 @@ export const Login = () => {
 
         <div className="flex flex-row justify-center px-8 mt-2">
           <button
-            disabled={ disabled() }
+            disabled={ !disabled() }
             className="bg-blue-600 font-bold text-center rounded-md p-2 w-full text-white hover:bg-blue-500 transition-colors disabled:opacity-50">
             Sign in.
           </button>
