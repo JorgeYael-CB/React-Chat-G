@@ -40,7 +40,7 @@ export const Login = () => {
       return setLoginError(data.error);
     };
 
-    login({...data.user!});
+    login({...data.user!}, data.token!);
     console.log('El usuario ya se loggeo');
   }
 
