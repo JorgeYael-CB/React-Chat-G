@@ -1,1 +1,2 @@
-export * from './login-user.ts';
+export * from './login-user';
+export * from './register-user';
