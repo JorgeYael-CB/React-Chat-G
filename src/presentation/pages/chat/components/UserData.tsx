@@ -18,10 +18,10 @@ export const UserData = ({ user }: { user: UserInterface }) => {
       </div>
 
       <div className="mt-12 bg-white mx-auto max-w-xl rounded-lg p-6 border-4 border-blue-700 my-8 shadow-lg">
-        <h2 className="text-lg bg-blue-300 text-center py-2 rounded-t-lg">Información del Usuario</h2>
+        <h2 className="text-lg bg-blue-300 text-center py-2 rounded-t-lg">Account information</h2>
         <div className="flex flex-col gap-6 mt-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg text-gray-700">Nombre:</h3>
+            <h3 className="text-lg text-gray-700">Name:</h3>
             <div className="flex items-center gap-4">
               <p className="text-lg text-gray-700">{user.name}</p>
               <FaEdit className="text-blue-500 cursor-pointer hover:text-blue-700" />
@@ -37,7 +37,7 @@ export const UserData = ({ user }: { user: UserInterface }) => {
           </div>
           <hr className="border-t-2 border-gray-300" />
           <div className="flex justify-between items-center">
-            <h3 className="text-lg text-gray-700">Contraseña:</h3>
+            <h3 className="text-lg text-gray-700">Password:</h3>
             <div className="flex items-center gap-4">
               <p className="text-lg text-gray-700">********</p>
               <FaEdit className="text-blue-500 cursor-pointer hover:text-blue-700" />
@@ -45,7 +45,11 @@ export const UserData = ({ user }: { user: UserInterface }) => {
           </div>
           <hr className="border-t-2 border-gray-300" />
           <div className="flex justify-between items-center">
-            <h3 className="text-lg text-gray-700">Foto de Perfil:</h3>
+            <h3 className="text-lg text-gray-700">Profile image:</h3>
+            <FaEdit className="text-blue-500 cursor-pointer hover:text-blue-700" />
+          </div>
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg text-gray-700">Country:</h3>
             <FaEdit className="text-blue-500 cursor-pointer hover:text-blue-700" />
           </div>
         </div>
