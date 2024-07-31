@@ -1,15 +1,8 @@
-import { useEffect } from "react";
 import { store } from "../../store";
-import { ChatInfo } from "./components";
+import { ChatInfo, UserData } from "./components";
 
 export const Chat = () => {
   const { isLogged } = store();
-
-
-
-  useEffect(() => {
-    // TODO: obtener los datos del usuario y validar que su sesion no haya sido expirada.
-  }, []);
 
 
   return (
@@ -25,11 +18,11 @@ export const Chat = () => {
         </form>
       </div>
 
-      <div className="lg:col-span-1 bg-gray-100 p-6">
+      <div className="lg:col-span-1 bg-gray-100 p-4">
         {
-          !isLogged
-          &&
-          <ChatInfo/>
+          isLogged
+          ? <UserData/>
+          : <ChatInfo/>
         }
       </div>
     </main>

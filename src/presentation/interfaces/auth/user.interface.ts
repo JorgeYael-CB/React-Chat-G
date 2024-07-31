@@ -8,4 +8,5 @@ export interface UserInterface {
   id: string | number,
   active: boolean,
   country: string,
+  messages: string[],
 };
