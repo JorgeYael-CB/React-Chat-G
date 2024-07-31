@@ -1,8 +1,34 @@
+import { useEffect, useState } from "react";
 import { store } from "../../store";
 import { ChatInfo, UserData } from "./components";
+import { UserInterface } from "../../interfaces/auth";
+import { getUser } from "../../../core/auth";
+import { Loading } from "../../components/spinners";
 
 export const Chat = () => {
-  const { isLogged } = store();
+  const { isLogged, token, logout } = store();
+  const [isLoading, setIsLoading] = useState(false);
+  const [userData, setUserData] = useState<UserInterface>();
+
+
+  async function getUserById(bearerToken:string){
+    const user = await getUser(bearerToken);
+    setIsLoading(false);
+
+    if( user.error ){
+      console.log(user.error);
+      return logout();
+    }
+
+    setUserData(user.user);
+  }
+
+  useEffect(() => {
+    if( isLogged && token ){
+      setIsLoading(true);
+      getUserById(token);
+    }
+  }, []);
 
 
   return (
@@ -18,13 +44,18 @@ export const Chat = () => {
         </form>
       </div>
 
-      <div className="lg:col-span-1 bg-gray-100 p-4">
-        {
-          isLogged
-          ? <UserData/>
-          : <ChatInfo/>
-        }
-      </div>
+      {
+        !isLoading
+        ?
+        <div className="lg:col-span-1 bg-gray-100 p-4">
+          {
+            isLogged && userData
+            ? <UserData user={ userData }/>
+            : <ChatInfo/>
+          }
+        </div>
+        : <div className="my-20"> <Loading/> </div>
+      }
     </main>
   )
 }
