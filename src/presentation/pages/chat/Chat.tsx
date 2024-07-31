@@ -32,6 +32,9 @@ export const Chat = () => {
 
 
   return (
+    isLoading
+    ? <Loading/>
+    :
     <main className="lg:grid lg:grid-cols-3">
       <div className="lg:col-span-2 bg-gray-900 h-screen overflow-y-scroll overflow-x-auto relative">
         <form className="absolute inset-x-0 bottom-0 mx-4 my-2 flex gap-3 items-center bg-gray-800 p-4 rounded-lg shadow-lg">
@@ -44,18 +47,13 @@ export const Chat = () => {
         </form>
       </div>
 
-      {
-        !isLoading
-        ?
-        <div className="lg:col-span-1 bg-gray-100 p-4">
-          {
-            isLogged && userData
-            ? <UserData user={ userData }/>
-            : <ChatInfo/>
-          }
-        </div>
-        : <div className="my-20"> <Loading/> </div>
-      }
+      <div className="lg:col-span-1 bg-gray-100 p-4">
+        {
+          isLogged && userData
+          ? <UserData user={ userData }/>
+          : <ChatInfo/>
+        }
+      </div>
     </main>
   )
 }
