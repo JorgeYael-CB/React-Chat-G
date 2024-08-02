@@ -5,6 +5,7 @@ import { UserInterface } from "../../interfaces/auth";
 import { getUser } from "../../../core/auth";
 import { Loading } from "../../components/spinners";
 import { envs } from "../../../config";
+import { MessageInterface, WsType } from "../../interfaces/messages";
 
 
 
@@ -40,6 +41,20 @@ export const Chat = () => {
       console.log('cliente desconectado');
     }
   }, [socket]);
+
+  useEffect(() => {
+    socket.addEventListener('message', event => {
+      const data = JSON.parse(event.data);
+      const typeMessage: WsType = 'client-message';
+
+      if( data.type === typeMessage ){
+        const payload:MessageInterface = data;
+
+        console.log('Mandaron nuevo mensaje');
+      }
+      // {"type":"new-user-joined","payload":{"userId":"66aaa24055664c26ec736379","serverId":"fa314548-ea39-4851-abeb-e4656329d9b8"}}
+    })
+  }, [socket])
 
 
   async function getUserById(bearerToken:string){
