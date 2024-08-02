@@ -4,14 +4,51 @@ import { ChatInfo, FormMessage, JoinChat, UserData } from "./components";
 import { UserInterface } from "../../interfaces/auth";
 import { getUser } from "../../../core/auth";
 import { Loading } from "../../components/spinners";
+import {connect} from 'socket.io-client';
+import { envs } from "../../../config";
+
+
+
+
+const connectionSocketServer = () => {
+  const socket = connect('ws://localhost:3000/ws', {
+    transports: ['websocket']
+  });
+
+  return socket;
+}
+
+
 
 //TODO: https://socket.io/docs/v4/
 
 export const Chat = () => {
+  const [socket] = useState(connectionSocketServer());
   const { isLogged, token, logout } = store();
   const { serverActive } = ServerStore();
   const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState<UserInterface>();
+  const [online, setOnline] = useState(false);
+
+
+  useEffect(() => {
+    setOnline( socket.connected );
+  }, [ socket ]);
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      setOnline(true)
+      console.log('Cliente conectado.');
+    })
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on('disconnect', () => {
+      setOnline(false)
+    })
+
+    // return socket.disconnect()
+  }, [socket]);
 
 
   async function getUserById(bearerToken:string){
@@ -50,7 +87,7 @@ export const Chat = () => {
       <div className="lg:col-span-1 bg-gray-100 p-4">
         {
           isLogged && userData
-          ? <UserData user={ userData }/>
+          ? <UserData online={ online } user={ userData }/>
           : <ChatInfo/>
         }
       </div>

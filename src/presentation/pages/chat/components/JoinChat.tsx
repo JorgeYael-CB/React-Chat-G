@@ -1,8 +1,21 @@
+import { FormEvent } from "react"
+
+
+
 
 export const JoinChat = () => {
+
+
+
+  const onSubmit = ( e:FormEvent<HTMLFormElement> ) => {
+    e.preventDefault();
+    //TODO: validar que el usuario tenga una sesion iniciada.
+  }
+
+
   return (
     <div className="flex items-center justify-center h-full px-4">
-      <form className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-xl">
+      <form onSubmit={ onSubmit } className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-xl">
         <div className="text-center mb-4">
           <h2 className="text-2xl text-white font-bold">Join or Find a Chat</h2>
           <p className="text-gray-400">Join a new chat or search for an existing chat by ID</p>

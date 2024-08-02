@@ -1,14 +1,21 @@
 import { UserInterface } from '../../../interfaces/auth/user.interface';
 import { FaEdit } from 'react-icons/fa';
 
-export const UserData = ({ user }: { user: UserInterface }) => {
+
+interface Props {
+  user: UserInterface;
+  online: boolean;
+}
+
+
+export const UserData = ({ user, online }: Props) => {
   return (
     <main className="shadow-md bg-gray-100 py-10">
-      <div className="flex flex-col items-center bg-white mx-auto max-w-xl rounded-lg p-6 border-4 border-blue-700 my-8 shadow-lg relative">
+      <div className={`flex flex-col items-center bg-white mx-auto max-w-xl rounded-lg p-6 border-4  my-8 shadow-lg relative`}>
         <div className="relative">
           <img
             src={user.img}
-            className="w-32 h-32 rounded-full border-4 border-blue-500"
+            className={`w-32 h-32 rounded-full border-4 ${online?'border-blue-500' : 'border-red-500'}`}
             alt="Profile image"
           />
           <FaEdit className="text-blue-500 cursor-pointer hover:text-blue-700 absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4" />
