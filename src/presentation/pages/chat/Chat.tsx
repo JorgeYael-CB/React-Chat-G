@@ -4,16 +4,13 @@ import { ChatInfo, FormMessage, JoinChat, UserData } from "./components";
 import { UserInterface } from "../../interfaces/auth";
 import { getUser } from "../../../core/auth";
 import { Loading } from "../../components/spinners";
-import {connect} from 'socket.io-client';
 import { envs } from "../../../config";
 
 
 
 
 const connectionSocketServer = () => {
-  const socket = connect('ws://localhost:3000/ws', {
-    transports: ['websocket']
-  });
+  const socket = new WebSocket(envs.UrlWss);
 
   return socket;
 }
@@ -32,20 +29,16 @@ export const Chat = () => {
 
 
   useEffect(() => {
-    setOnline( socket.connected );
-  }, [ socket ]);
-
-  useEffect(() => {
-    socket.on('connect', () => {
-      setOnline(true)
-      console.log('Cliente conectado.');
-    })
+    socket.onopen = () => {
+      setOnline(true);
+    }
   }, [socket]);
 
   useEffect(() => {
-    socket.on('disconnect', () => {
-      setOnline(false)
-    })
+    socket.onclose = () => {
+      setOnline(false);
+      console.log('cliente desconectado');
+    }
 
     // return socket.disconnect()
   }, [socket]);
