@@ -20,12 +20,12 @@ const connectionSocketServer = () => {
 //TODO: https://socket.io/docs/v4/
 
 export const Chat = () => {
+  const { setOnline } = ServerStore();
   const [socket] = useState(connectionSocketServer());
   const { isLogged, token, logout } = store();
   const { serverActive } = ServerStore();
   const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState<UserInterface>();
-  const [online, setOnline] = useState(false);
 
 
   useEffect(() => {
@@ -39,8 +39,6 @@ export const Chat = () => {
       setOnline(false);
       console.log('cliente desconectado');
     }
-
-    // return socket.disconnect()
   }, [socket]);
 
 
@@ -80,7 +78,7 @@ export const Chat = () => {
       <div className="lg:col-span-1 bg-gray-100 p-4">
         {
           isLogged && userData
-          ? <UserData online={ online } user={ userData }/>
+          ? <UserData user={ userData }/>
           : <ChatInfo/>
         }
       </div>
