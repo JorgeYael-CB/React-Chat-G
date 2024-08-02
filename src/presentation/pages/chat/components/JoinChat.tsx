@@ -1,15 +1,25 @@
 import { FormEvent } from "react"
+import { ServerStore, store } from "../../../store";
 
 
 
 
 export const JoinChat = () => {
-
+  const { userOnline } = ServerStore();
+  const { isLogged } = store();
 
 
   const onSubmit = ( e:FormEvent<HTMLFormElement> ) => {
     e.preventDefault();
-    //TODO: validar que el usuario tenga una sesion iniciada.
+    if( !isLogged ){
+      console.log("Inicia sesion para continuar.");
+      return;
+    }
+
+    if( !userOnline ){
+      console.log("Parece que el cliente no esta conectado, quieres recargar el navegador para continuar?");
+      return;
+    }
   }
 
 

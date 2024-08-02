@@ -20,7 +20,7 @@ export const ServerStore = create<ServerProps>( set => ({
   userOnline: false,
   id: undefined,
   serverUuid: undefined,
-  serverActive: false,
+  serverActive: true,
 
   setId: (id) => {
     set({id})

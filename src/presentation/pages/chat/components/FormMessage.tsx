@@ -1,5 +1,12 @@
+import { useState } from "react"
+import { MessageInterface } from "../../../interfaces/messages";
+
 
 export const FormMessage = () => {
+  const [messages, setMessages] = useState<MessageInterface>();
+
+
+
   return (
     <form className="absolute inset-x-0 bottom-0 mx-4 my-2 flex gap-3 items-center bg-gray-800 p-4 rounded-lg shadow-lg">
       <input
