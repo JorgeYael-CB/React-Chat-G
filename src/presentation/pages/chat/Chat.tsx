@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ServerStore, store } from "../../store";
+import { ChatStore, ServerStore, store } from "../../store";
 import { ChatInfo, FormMessage, JoinChat, UserData } from "./components";
 import { UserInterface } from "../../interfaces/auth";
 import { getUser } from "../../../core/auth";
@@ -23,6 +23,7 @@ const connectionSocketServer = () => {
 export const Chat = () => {
   const { setOnline } = ServerStore();
   const [socket] = useState(connectionSocketServer());
+  const { messages } = ChatStore();
   const { isLogged, token, logout } = store();
   const { serverActive } = ServerStore();
   const [isLoading, setIsLoading] = useState(false);
@@ -49,8 +50,6 @@ export const Chat = () => {
 
       if( data.type === typeMessage ){
         const payload:MessageInterface = data;
-
-        console.log('Mandaron nuevo mensaje');
       }
       // {"type":"new-user-joined","payload":{"userId":"66aaa24055664c26ec736379","serverId":"fa314548-ea39-4851-abeb-e4656329d9b8"}}
     })
@@ -81,16 +80,19 @@ export const Chat = () => {
     isLoading
     ? <Loading/>
     :
-    <main className="lg:grid lg:grid-cols-3">
-      <div className="lg:col-span-2 bg-gray-900 h-screen overflow-y-scroll overflow-x-auto relative">
-        {
-          serverActive
-          ? <FormMessage/>
-          : <JoinChat/>
-        }
-      </div>
+    <main className="grid lg:grid-cols-3">
+      {
+        serverActive
+        ?<div className="lg:col-span-2 bg-gray-900 h-screen overflow-y-scroll overflow-x-auto relative">
+          <FormMessage/>
+        </div>
+        : <div className="lg:col-span-2 lg:py-0 py-12 lg:h-screen bg-slate-900">
+          <JoinChat/>
+        </div>
+      }
 
-      <div className="lg:col-span-1 bg-gray-100 p-4">
+
+      <div className="lg:col-span-1 bg-gray-100 p-4 h-screen">
         {
           isLogged && userData
           ? <UserData user={ userData }/>

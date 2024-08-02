@@ -1,4 +1,4 @@
-import { createStore } from 'zustand';
+import { create } from 'zustand';
 import { MessageInterface } from '../interfaces/messages';
 
 
@@ -8,7 +8,7 @@ interface Props {
 }
 
 
-export const ChatStore = createStore<Props>( set => ({
+export const ChatStore = create<Props>( set => ({
   messages: [],
   setNewMessage: ( message ) => {
     set( prev => ({
