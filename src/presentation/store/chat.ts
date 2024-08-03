@@ -14,6 +14,6 @@ export const ChatStore = create<Props>( set => ({
     set( prev => ({
       ...prev,
       messages: [...prev.messages, message],
-    }))
+    }));
   }
 }))

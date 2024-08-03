@@ -8,8 +8,6 @@ import { envs } from "../../../config";
 import { MessageInterface, WsType } from "../../interfaces/messages";
 
 
-
-
 const connectionSocketServer = () => {
   const socket = new WebSocket(envs.UrlWss);
 
@@ -23,11 +21,17 @@ const connectionSocketServer = () => {
 export const Chat = () => {
   const { setOnline } = ServerStore();
   const [socket] = useState(connectionSocketServer());
-  const { messages } = ChatStore();
   const { isLogged, token, logout } = store();
+  const { messages, setNewMessage } = ChatStore();
+  const { id } = ServerStore();
   const { serverActive } = ServerStore();
   const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState<UserInterface>();
+
+
+  useEffect(() => {
+    console.log('Nuevo mensaje recibido');
+  }, [messages]);
 
 
   useEffect(() => {
@@ -49,8 +53,15 @@ export const Chat = () => {
       const typeMessage: WsType = 'client-message';
 
       if( data.type === typeMessage ){
-        const payload:MessageInterface = data;
+        const payload:MessageInterface = data.payload;
+
+        console.log({id: id, id2: payload.serverId});
+
+        if( payload.serverId === id ){
+          setNewMessage(payload);
+        }
       }
+
       // {"type":"new-user-joined","payload":{"userId":"66aaa24055664c26ec736379","serverId":"fa314548-ea39-4851-abeb-e4656329d9b8"}}
     })
   }, [socket])
@@ -84,6 +95,13 @@ export const Chat = () => {
       {
         serverActive
         ?<div className="lg:col-span-2 bg-gray-900 h-screen overflow-y-scroll overflow-x-auto relative">
+          {
+            messages.map( msg => (
+              <div key={Date.now()} className="text-white text-2xl">
+                {msg.content}
+              </div>
+            ))
+          }
           <FormMessage/>
         </div>
         : <div className="lg:col-span-2 lg:py-0 py-12 lg:h-screen bg-slate-900">
