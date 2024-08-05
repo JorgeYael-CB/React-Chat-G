@@ -19,14 +19,20 @@ const connectionSocketServer = () => {
 //TODO: https://socket.io/docs/v4/
 
 export const Chat = () => {
-  const { setOnline } = ServerStore();
-  const [socket] = useState(connectionSocketServer());
-  const { isLogged, token, logout } = store();
+  const { setOnline, userOnline, serverActive, id } = ServerStore();
+  const [socket, useSocket] = useState<WebSocket>();
+  const { isLogged, token, logout, user } = store();
   const { messages, setNewMessage } = ChatStore();
-  const { id } = ServerStore();
-  const { serverActive } = ServerStore();
   const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState<UserInterface>();
+
+
+  useEffect(() => {
+    if( userOnline ) return;
+
+    useSocket( connectionSocketServer() );
+    console.log('Intentando conectarme.');
+  }, []);
 
 
   useEffect(() => {
@@ -35,36 +41,47 @@ export const Chat = () => {
 
 
   useEffect(() => {
+    if( !socket ) return;
+
     socket.onopen = () => {
       setOnline(true);
     }
   }, [socket]);
 
   useEffect(() => {
+    if( !socket ) return;
+
     socket.onclose = () => {
       setOnline(false);
+
+      //TODO: mandar mensaje al servidor de un cliente desconectado
+
       console.log('cliente desconectado');
     }
   }, [socket]);
 
+
   useEffect(() => {
+    if( !socket ) return;
+
     socket.addEventListener('message', event => {
       const data = JSON.parse(event.data);
-      const typeMessage: WsType = 'client-message';
+      const typeMessage:WsType = 'client-message';
 
       if( data.type === typeMessage ){
         const payload:MessageInterface = data.payload;
-
-        console.log({id: id, id2: payload.serverId});
+        console.log({id, id2: payload.serverId});
 
         if( payload.serverId === id ){
           setNewMessage(payload);
         }
+      } else if( data.type === "new-user-joined" ){
+        console.log("Un nuevo usuario se ha unido al servidor!");
       }
 
       // {"type":"new-user-joined","payload":{"userId":"66aaa24055664c26ec736379","serverId":"fa314548-ea39-4851-abeb-e4656329d9b8"}}
     })
-  }, [socket])
+  }, [socket, id]);
 
 
   async function getUserById(bearerToken:string){
@@ -97,9 +114,9 @@ export const Chat = () => {
         ?<div className="lg:col-span-2 bg-gray-900 h-screen overflow-y-scroll overflow-x-auto relative">
           {
             messages.map( msg => (
-              <div key={Date.now()} className="text-white text-2xl">
+              <p key={Math.random()} className={`text-white text-2xl ${msg.userId === user!.id ? 'text-green-500' : 'text-red-500'}`}>
                 {msg.content}
-              </div>
+              </p>
             ))
           }
           <FormMessage/>

@@ -26,9 +26,7 @@ export const ServerStore = create<ServerProps>( set => ({
   serverUuid: undefined,
   serverActive: false,
 
-  setId: (id) => {
-    set({id})
-  },
+  setId: (id: string) => set({ id }),
 
   setServerUuid: (serverUuid) => {
     set({serverUuid})

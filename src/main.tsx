@@ -7,7 +7,7 @@ import { Routes } from './presentation/router'
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <RouterProvider router={ Routes }/>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )
