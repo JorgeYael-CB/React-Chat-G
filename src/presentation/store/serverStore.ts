@@ -15,17 +15,13 @@ interface ServerProps {
 
 
 export const ServerStore = create<ServerProps>( set => ({
-  setServerActive: ( value ) => {
-    set({serverActive: value});
-  },
-  setOnline: (value) => {
-    set({userOnline: value});
-  },
   userOnline: false,
   id: undefined,
   serverUuid: undefined,
   serverActive: false,
 
+  setOnline: (value) => set({userOnline: value}),
+  setServerActive: ( value ) => set({serverActive: value}),
   setId: (id: string) => set({ id }),
 
   setServerUuid: (serverUuid) => {
