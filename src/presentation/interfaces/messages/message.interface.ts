@@ -1,7 +1,16 @@
+import { roles } from "../auth"
 
 
 export interface MessageInterface {
-  userId: string | number,
+  user: {
+    _id: string,
+    name: string,
+    img: string,
+    roles: roles[],
+    active: boolean,
+    country: string
+  },
+  server: string,
   content: string,
-  serverId: string,
+  id: string,
 }

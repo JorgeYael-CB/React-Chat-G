@@ -22,13 +22,13 @@ export const Chat = () => {
   const { setOnline, userOnline, serverActive, id } = ServerStore();
   const [socket, useSocket] = useState<WebSocket>();
   const { isLogged, token, logout } = store();
-  const { messages, setNewMessage, setNewUser, users } = ChatStore();
+  const { messages, setNewMessage, setNewUser} = ChatStore();
   const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState<UserInterface>();
 
 
   useEffect(() => {
-    if( userOnline ) return;
+    if( userOnline || !isLogged ) return;
 
     useSocket( connectionSocketServer() );
     console.log('Intentando conectarme.');
@@ -70,11 +70,8 @@ export const Chat = () => {
 
       if( data.type === typeMessage ){
         const payload:MessageInterface = data.payload;
-        console.log({id: id, id2: payload.serverId});
 
-        if( payload.serverId === id ){
-          setNewMessage(payload);
-        }
+        setNewMessage(payload);
       } else if( data.type === "new-user-joined" ){
         const payload:NewUser = data.payload;
         setNewUser(payload.newUser);
@@ -82,7 +79,7 @@ export const Chat = () => {
         //TODO: mandar mensaje de bienvenida al nuevo usuario
       }
     })
-  }, [socket, id]);
+  }, [socket]);
 
 
   async function getUserById(bearerToken:string){
@@ -114,9 +111,9 @@ export const Chat = () => {
         serverActive
         ?<div className="lg:col-span-2 bg-gray-900 h-screen overflow-y-scroll overflow-x-auto relative">
           {messages.map((msg, index) => (
-                <div key={index} className={`flex items-start gap-2.5 ${msg.userId === id ? 'justify-end' : ''}`}>
-                  <img className="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="Jese image" />
-                  <div className={`flex flex-col w-full max-w-[320px] p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700 ${msg.userId === id ? 'bg-blue-500 text-white' : ''}`}>
+                <div key={index} className={`flex items-start gap-2.5`}>
+                  <img className="w-8 h-8 rounded-full" src={msg.user.img} alt={`Image ${msg.user.name}`} />
+                  <div className={`flex flex-col w-full max-w-[320px] p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700 ${msg.user._id === id ? 'bg-blue-500 text-white' : ''}`}>
                     <div className="flex items-center space-x-2 rtl:space-x-reverse">
                       <span className="text-sm font-semibold text-gray-900 dark:text-white">Holaf</span>
                     </div>

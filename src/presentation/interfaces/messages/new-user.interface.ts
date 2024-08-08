@@ -9,6 +9,7 @@ export interface UserChat {
 
 export interface NewUser {
   serverId: string;
+  serverUuid: string;
   userId: string;
   newUser: UserChat;
 }
