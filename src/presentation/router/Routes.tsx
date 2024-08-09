@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { ForgotPassword, Login, Register, ResetPassword } from '../pages/auth';
+import { ForgotPassword, IsUserLogged, Login, Register, ResetPassword } from '../pages/auth';
 import { Chat } from "../pages/chat";
 import { PrivateAcces } from "../pages/auth/PrivateAcces";
 import { ReactElement } from "react";
@@ -40,18 +40,19 @@ export const Routes = createBrowserRouter([
     element: <Chat/>,
   },
   {
-    path: '/',
-    element: <PrivateAcces/>,
+    path: 'chat/',
+    element: <IsUserLogged/>,
     children: [
       {
-        path: 'auth/',
-        children: authRoutes,
-      },
-      {
-        path: 'chat/:serverId',
+        path: ':serverId',
         element: <h1>Hello World</h1>
       }
     ]
+  },
+  {
+    path: '/auth',
+    element: <PrivateAcces/>,
+    children: authRoutes,
   },
   {
     path: '/*',
