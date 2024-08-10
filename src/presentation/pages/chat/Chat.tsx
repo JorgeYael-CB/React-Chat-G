@@ -1,12 +1,38 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom"
+import { UserInterface } from "../../interfaces/auth";
+import { User } from "./components";
 
 
 export const Chat = () => {
   const { serverId } = useParams();
+  const [users, setuSers] = useState<UserInterface[]>([
+    {
+      active: false,
+      country: 'mx',
+      email: 'correo@correo.com',
+      id: "adwawd",
+      img: "https://th.bing.com/th/id/R.ccf74d22c13a06fd773af8643dc8277a?rik=%2bazONGeen5L8PQ&pid=ImgRaw&r=0",
+      messages: [],
+      name: "Andrea",
+    roles: ["USER"],
+    },
+    {
+      active: false,
+      country: 'mx',
+      email: 'correo@correo2.com',
+      id: "adwawd2",
+      img: "https://th.bing.com/th/id/OIP.hBFh-SwqngbQFyUcOkHcDQHaLH?rs=1&pid=ImgDetMain",
+      messages: [],
+      name: "Carlos",
+    roles: ["ADMIN"],
+    },
+  ]);
+
 
 
   return (
-    <main>
+    <main className="min-h-screen flex flex-col">
 
       <div className="flex flex-col gap-2 my-2">
         <h2 className="text-center text-black font-semibold text-2xl mt-4">Quieres iniciar un nuevo chat?</h2>
@@ -23,12 +49,18 @@ export const Chat = () => {
         </form>
       </div>
 
-      <div className='grid grid-cols-4'>
-        <div className='col-span-1 bg-indigo-700'>
-          <h2>Usuarios</h2>
+      <div className='grid grid-cols-5 '>
+        <div className="col-span-1 bg-gray-200 h-screen overflow-y-auto p-3">
+          <h2 className="text-black font-semibold text-2xl mb-6">Users</h2>
+
+          <ul className="space-y-4">
+            {users?.map((user) => (
+              <User key={user.id} user={user}/>
+            ))}
+          </ul>
         </div>
 
-        <div className='col-span-2 bg-white'>
+        <div className='col-span-3 bg-white'>
           <h2>Chat</h2>
         </div>
 

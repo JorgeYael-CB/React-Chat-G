@@ -1,3 +1,4 @@
+import { UserInterface } from "../auth"
 
 export interface JoinNewUser {
   type: string,
@@ -5,12 +6,7 @@ export interface JoinNewUser {
     userId: string,
     serverUuid: string,
     serverId: string,
-    newUser: {
-      _id: string,
-      name: string,
-      img: string,
-      country: string,
-    }
+    newUser: UserInterface
   }
 }
 
