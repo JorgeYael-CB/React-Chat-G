@@ -1,7 +1,7 @@
-import { UserInterface } from "../../../interfaces/auth"
+import { UserDbInterface } from "../../../interfaces/server"
 
 
-export const User = ({user}: {user: UserInterface}) => {
+export const User = ({user}: {user: UserDbInterface}) => {
   return (
     <li key={user.name} className="flex items-center gap-4 p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors">
       <button>
@@ -9,7 +9,7 @@ export const User = ({user}: {user: UserInterface}) => {
       </button>
       <div className="text-black">
         <p className="font-bold text-lg">{user.name}</p>
-        <img className="w-6 h-4" src={`/countrys/${user.country.toLowerCase()}.png`} alt={`${user.country} img`} />
+        <img className="w-6 h-4" src={`/countrys/${user.country!.toLowerCase()}.png`} alt={`${user.country} img`} />
       </div>
     </li>
   )

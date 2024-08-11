@@ -1,13 +1,10 @@
-import { UserInterface } from "../auth"
+import { UserDbInterface } from "./";
 
 
 
-interface NewUser extends UserInterface {
-  _id: string | number;
-}
 
 export interface JoinNewUser {
-  newUser: NewUser;
+  newUser: UserDbInterface;
   serverId: string;
   serverUuid: string;
   userId: string;
