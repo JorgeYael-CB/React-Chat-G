@@ -4,20 +4,43 @@ import { FormMessage, Message, Msg, User } from "./components";
 import { store, WsStore } from "../../store";
 import { JoinNewUser, UserDbInterface } from "../../interfaces/server";
 import { MessageInterface } from "../../interfaces/messages";
+import { getServerData } from "../../../core/server";
+import { Loading } from "../../components/spinners";
 
 
 
 export const Chat = () => {
   const { serverId } = useParams();
+  const { token, logout } = store();
   const { addEventListener } = WsStore();
   const { user } = store();
-  const [users, setuSers] = useState<UserDbInterface[]>([]);
+  const [users, setUsers] = useState<UserDbInterface[]>([]);
   const [messages, setMessages] = useState<Msg[]>([]);
+  const [serverIsLoading, setServerIsLoading] = useState(true);
 
+
+  const getServerInfo = async() => {
+    if( !token || !serverId ){
+      logout();
+      return;
+    }
+
+    const data = await getServerData({serverId, token});
+    setServerIsLoading(false);
+
+    if( data.error || !data.server ){
+      console.log(data.error ?? 'Unexpected error!');
+      return;
+    }
+
+    console.log(data.server.users);
+    setUsers( data.server.users );
+  }
 
 
   useEffect(() => {
     //TODO: buscar el servidor con ese ID
+    getServerInfo();
   }, []);
 
 
@@ -25,7 +48,7 @@ export const Chat = () => {
     addEventListener<JoinNewUser>('new-user-joined', function(data) {
       if (data.serverUuid === serverId) {
         //TODO: Mensaje de bienvenida al nuevo usuario
-        setuSers(prevUsers => [...prevUsers, {...data.newUser, id: data.newUser._id}]);
+        setUsers(prevUsers => [...prevUsers, {...data.newUser, id: data.newUser._id}]);
       }
     });
 
@@ -50,6 +73,9 @@ export const Chat = () => {
 
 
   return (
+    serverIsLoading
+    ? <Loading/>
+    :
     <main>
       <div className='grid grid-cols-5 h-screen'>
         <div className="col-span-1 bg-gray-300 p-3 overflow-y-scroll">
@@ -57,7 +83,7 @@ export const Chat = () => {
 
           <ul className="space-y-4">
             {users?.map((user) => (
-              <User key={user.id} user={user}/>
+              <User key={user._id} user={user}/>
             ))}
           </ul>
         </div>
@@ -77,6 +103,5 @@ export const Chat = () => {
         </div>
       </div>
     </main>
-
   )
 }
