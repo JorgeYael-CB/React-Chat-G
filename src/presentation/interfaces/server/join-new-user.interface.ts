@@ -1,13 +1,17 @@
 import { UserInterface } from "../auth"
 
-export interface JoinNewUser {
-  type: string,
-  payload: {
-    userId: string,
-    serverUuid: string,
-    serverId: string,
-    newUser: UserInterface
-  }
+
+
+interface NewUser extends UserInterface {
+  _id: string | number;
 }
+
+export interface JoinNewUser {
+  newUser: NewUser;
+  serverId: string;
+  serverUuid: string;
+  userId: string;
+}
+
 
 

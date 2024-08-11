@@ -2,14 +2,16 @@ import { FormEvent, useState } from "react"
 import { ServerStore, store } from "../../../store";
 import { joinRandomServer } from "../../../../core/server";
 import { Loading } from "../../../components/spinners";
+import { useNavigate } from "react-router-dom";
 
 
 
 
 export const JoinChat = () => {
-  const { userOnline, setServerActive, setId, setServerUuid } = ServerStore();
+  const { userOnline } = ServerStore();
   const { isLogged, token } = store();
   const [isLoading, setIsLoading] = useState(false);
+  const nav = useNavigate();
 
 
   const onSubmit = async( e:FormEvent<HTMLFormElement> ) => {
@@ -29,13 +31,11 @@ export const JoinChat = () => {
     const data = await joinRandomServer(token);
     setIsLoading(false);
 
-    if( data.error ){
-      return console.log(data.error);
+    if( data.error || !data.server ){
+      return console.log(data.error ?? "Unexpected Error.");
     }
 
-    setId( data.server!.id );
-    setServerUuid( data.server!.serverId );
-    setServerActive(true);
+    nav(`/chat/${data.server.serverId}`); // Uuid
   }
 
 

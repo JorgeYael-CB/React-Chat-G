@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { MessageInterface, UserChat } from '../interfaces/messages';
+import { MessageInterface } from '../interfaces/messages';
+import { UserInterface } from '../interfaces/auth/user.interface';
 
 
 
@@ -7,8 +8,8 @@ import { MessageInterface, UserChat } from '../interfaces/messages';
 interface Props {
   messages: MessageInterface[],
   setNewMessage: ( message: MessageInterface ) => void;
-  users: UserChat[],
-  setNewUser: ( newUser: UserChat ) => void;
+  users: UserInterface[],
+  setNewUser: ( newUser: UserInterface ) => void;
 }
 
 

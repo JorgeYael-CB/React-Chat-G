@@ -1,13 +1,15 @@
-import { IoMdSend } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { UserInterface } from "../../interfaces/auth";
 import { FormMessage, Message, Msg, User } from "./components";
+import { WsStore } from "../../store";
+import { JoinNewUser } from "../../interfaces/server";
 
 
 
 export const Chat = () => {
   const { serverId } = useParams();
+  const { addEventListener } = WsStore();
 
   const [users, setuSers] = useState<UserInterface[]>([
     {
@@ -149,6 +151,13 @@ export const Chat = () => {
     //TODO: buscar el servidor con ese ID
   }, []);
 
+
+  addEventListener<JoinNewUser>('new-user-joined', function( data ){
+    if( data.serverUuid == serverId ){
+      //TODO: mensaje de bienvenida al nuevo usuario
+      setuSers( prevUsers => [...prevUsers, {...data.newUser, id: data.newUser._id}] );
+    }
+  })
 
 
   return (
