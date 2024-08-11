@@ -6,4 +6,6 @@ export interface MessageInterface {
   server: string,
   content: string,
   id: string,
+  createdAt: Date,
+  updatedAt: Date,
 }

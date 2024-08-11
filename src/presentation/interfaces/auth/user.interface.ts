@@ -9,4 +9,6 @@ export interface UserInterface {
   active: boolean,
   country: string,
   messages: string[],
+  updatedAt: Date,
+  createdAt: Date,
 };
