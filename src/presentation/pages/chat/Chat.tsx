@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { FormMessage, Message, Msg, User } from "./components";
 import { store, WsStore } from "../../store";
-import { JoinNewUser, UserDbInterface } from "../../interfaces/server";
+import { JoinNewUser } from "../../interfaces/server";
 import { MessageInterface } from "../../interfaces/messages";
-import { getServerData } from "../../../core/server";
+import { getServerData, sendMessage } from "../../../core/server";
 import { Loading } from "../../components/spinners";
+import { UserInterface } from "../../interfaces/auth";
 
 
 
@@ -14,9 +15,10 @@ export const Chat = () => {
   const { token, logout } = store();
   const { addEventListener } = WsStore();
   const { user } = store();
-  const [users, setUsers] = useState<UserDbInterface[]>([]);
+  const [users, setUsers] = useState<UserInterface[]>([]);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [serverIsLoading, setServerIsLoading] = useState(true);
+  const [isLoadingMessage, setIsLoadingMessage] = useState(false);
 
 
   const getServerInfo = async() => {
@@ -48,18 +50,21 @@ export const Chat = () => {
     addEventListener<JoinNewUser>('new-user-joined', function(data) {
       if (data.serverUuid === serverId) {
         //TODO: Mensaje de bienvenida al nuevo usuario
-        setUsers(prevUsers => [...prevUsers, {...data.newUser, id: data.newUser._id}]);
+        setUsers(prevUsers => [{...data.newUser}, ...prevUsers]);
       }
     });
 
     addEventListener<MessageInterface>('client-message', function(data) {
       if (data.serverUuid === serverId) {
+
+        console.log(data);
+
         setMessages(prevMessages => [
           ...prevMessages,
           {
             ...data,
             delivered: true,
-            myMessage: data.user._id === user!.id,
+            myMessage: data.user.id === user!.id,
           }
         ]);
       }
@@ -70,6 +75,18 @@ export const Chat = () => {
       //TODO: eliminar los event listeners de WsStore mediante un metodo.
     };
   }, [serverId, addEventListener, user]);
+
+
+  const onSendMessage = async( value: string ) => {
+    setIsLoadingMessage(true);
+    const data = await sendMessage({content: value, serverId: serverId!, token: token!});
+
+    setIsLoadingMessage(false);
+    if( data.error || !data.message ){
+      console.log(data.error ?? 'Unexpected error.');
+      return;
+    }
+  };
 
 
   return (
@@ -83,7 +100,7 @@ export const Chat = () => {
 
           <ul className="space-y-4">
             {users?.map((user) => (
-              <User key={user._id} user={user}/>
+              <User key={user.id} user={user}/>
             ))}
           </ul>
         </div>
@@ -95,7 +112,7 @@ export const Chat = () => {
             ))}
           </div>
 
-          <FormMessage onSendMessage={ (value) => console.log(value) }/>
+          <FormMessage validSendMessage={!isLoadingMessage} onSendMessage={ onSendMessage }/>
         </div>
 
         <div className='col-span-1 bg-black overflow-y-scroll'>

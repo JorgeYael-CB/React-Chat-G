@@ -1,7 +1,8 @@
-import { UserDbInterface } from "../../../interfaces/server"
+import { UserInterface } from "../../../interfaces/auth"
 
 
-export const User = ({user}: {user: UserDbInterface}) => {
+
+export const User = ({user}: {user: UserInterface}) => {
   return (
     <li key={user.name} className="flex items-center gap-4 p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors">
       <button>

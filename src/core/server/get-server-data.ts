@@ -1,6 +1,6 @@
 import { envs } from "../../config";
 import { MessageDbInterface } from "../../presentation/interfaces/messages";
-import { UserDbInterface } from "../../presentation/interfaces/server";
+import { UserInterface } from "../../presentation/interfaces/server";
 
 
 interface Props {
@@ -13,7 +13,7 @@ interface GetServerDataInterface {
   error?: string;
   status: number;
   server?: {
-    users: UserDbInterface[],
+    users: UserInterface[],
     messages: MessageDbInterface[],
     limitUsers: number,
     serverId: string;

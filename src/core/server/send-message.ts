@@ -1,16 +1,11 @@
 import { envs } from "../../config";
-import { UserInterface } from "../../presentation/interfaces/auth";
+import { MessageInterface } from "../../presentation/interfaces/messages";
 
 
 interface Props {
   error?: string;
   status: number;
-  message?: {
-    user: UserInterface;
-    server: string,
-    content: string,
-    id: string,
-  },
+  message?: MessageInterface,
 }
 
 interface Data {

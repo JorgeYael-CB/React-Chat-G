@@ -1,10 +1,10 @@
-import { UserDbInterface } from "./";
+import { UserInterface } from "./";
 
 
 
 
 export interface JoinNewUser {
-  newUser: UserDbInterface;
+  newUser: UserInterface;
   serverId: string;
   serverUuid: string;
   userId: string;

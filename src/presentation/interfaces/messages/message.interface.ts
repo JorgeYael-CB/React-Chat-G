@@ -1,8 +1,9 @@
-import { UserDbInterface } from "../server";
+import { UserInterface } from "../auth";
+
 
 
 export interface MessageInterface {
-  user: UserDbInterface,
+  user: UserInterface,
   server: string,
   content: string,
   id: string,
