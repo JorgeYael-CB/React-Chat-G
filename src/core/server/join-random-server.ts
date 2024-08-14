@@ -8,7 +8,7 @@ interface User {
   country:string,
 }
 
-interface JoinRandomServer {
+export interface JoinServerInterface {
   server?: {
     messages: string[],
     limitUsers: number,
@@ -21,7 +21,7 @@ interface JoinRandomServer {
   error?: string,
 }
 
-export const joinRandomServer = async( token: string ):Promise<JoinRandomServer> => {
+export const joinRandomServer = async( token: string ):Promise<JoinServerInterface> => {
   try {
     const url = `${envs.apiUrl}/server/join-random-server`;
     const res = await fetch(url, {
